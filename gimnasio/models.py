@@ -86,3 +86,19 @@ class Pago(models.Model):
 
     def __str__(self):
         return f"Pago {formatear_pesos(self.monto)} el {self.fecha_pago:%d/%m/%Y}"
+
+
+class Ingreso(models.Model):
+    """Ingreso permitido de un socio al gimnasio (RF-04).
+
+    Solo se guardan los ingresos permitidos; los denegados no se registran.
+    """
+
+    socio = models.ForeignKey(Socio, on_delete=models.CASCADE, related_name="ingresos")
+    fecha_hora = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-fecha_hora"]
+
+    def __str__(self):
+        return f"{self.socio.nombre} - {timezone.localtime(self.fecha_hora):%d/%m/%Y %H:%M}"

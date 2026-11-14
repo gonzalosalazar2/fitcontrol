@@ -121,3 +121,13 @@ class AsignarPlanForm(forms.Form):
                 f"El monto debe ser igual al precio del plan ({formatear_pesos(plan.precio)})",
             )
         return datos
+
+
+class IngresoForm(forms.Form):
+    """Formulario de RF-04: el recepcionista ingresa el RUT del socio."""
+
+    rut = forms.CharField(
+        label="RUT del socio",
+        widget=forms.TextInput(attrs={"placeholder": "12.345.678-5"}),
+        error_messages={"required": "Ingrese el RUT del socio"},
+    )

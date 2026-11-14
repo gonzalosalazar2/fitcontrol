@@ -1,0 +1,23 @@
+{% extends "gimnasio/base.html" %}
+{% block contenido %}
+  <h1>Registrar ingreso</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <label for="id_rut">RUT del socio</label>
+    {{ form.rut }}
+    <span class="ayuda">Ej: 12.345.678-5</span>
+    {% for error in form.rut.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <div class="botones">
+      <button type="submit">Registrar ingreso</button>
+    </div>
+  </form>
+
+  {% if resultado %}
+    <div style="margin-top:24px; padding:14px; border:2px solid {% if resultado.permitido %}#2e7d32{% else %}#a00{% endif %};">
+      <strong>{% if resultado.permitido %}&#10003; Acceso permitido{% else %}&#10007; Acceso denegado{% endif %}</strong>
+      {% for linea in resultado.lineas %}<div>{{ linea }}</div>{% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

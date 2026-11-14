@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Membresia, Pago, Plan, Socio
+from .models import Ingreso, Membresia, Pago, Plan, Socio
 
 
 @admin.register(Socio)
@@ -22,3 +22,8 @@ class MembresiaAdmin(admin.ModelAdmin):
 @admin.register(Pago)
 class PagoAdmin(admin.ModelAdmin):
     list_display = ("membresia", "monto", "fecha_pago")
+
+
+@admin.register(Ingreso)
+class IngresoAdmin(admin.ModelAdmin):
+    list_display = ("socio", "fecha_hora")
