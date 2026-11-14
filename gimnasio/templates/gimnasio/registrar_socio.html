@@ -1,0 +1,29 @@
+{% extends "gimnasio/base.html" %}
+{% block contenido %}
+  <h1>Registrar socio</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <label for="{{ form.nombre.id_for_label }}">Nombre completo</label>
+    {{ form.nombre }}
+    {% for error in form.nombre.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <label for="{{ form.rut.id_for_label }}">RUT</label>
+    {{ form.rut }}
+    <span class="ayuda">Ej: 12.345.678-5</span>
+    {% for error in form.rut.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <label for="{{ form.correo.id_for_label }}">Correo</label>
+    {{ form.correo }}
+    {% for error in form.correo.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <label for="{{ form.telefono.id_for_label }}">Teléfono</label>
+    {{ form.telefono }}
+    {% for error in form.telefono.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <div class="botones">
+      <button type="submit">Guardar</button>
+      <a href="{% url 'inicio' %}">Cancelar</a>
+    </div>
+  </form>
+{% endblock %}

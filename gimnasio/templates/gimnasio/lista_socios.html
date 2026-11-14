@@ -1,0 +1,22 @@
+{% extends "gimnasio/base.html" %}
+{% block contenido %}
+  <h1>Socios</h1>
+  <table border="1" cellpadding="6" cellspacing="0" style="width:100%; border-collapse:collapse;">
+    <tr>
+      <th>RUT</th><th>Nombre</th><th>Plan</th><th>Vence</th><th>Estado</th><th>Acciones</th>
+    </tr>
+    {% for fila in filas %}
+    <tr>
+      <td>{{ fila.socio.rut }}</td>
+      <td>{{ fila.socio.nombre }}</td>
+      <td>{{ fila.plan }}</td>
+      <td>{% if fila.vencimiento %}{{ fila.vencimiento|date:"d/m/Y" }}{% endif %}</td>
+      <td>{{ fila.estado }}</td>
+      <td><a href="{% url 'asignar_plan' fila.socio.id %}">Asignar plan</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No hay socios registrados</td></tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'registrar_socio' %}">Registrar nuevo socio</a></p>
+{% endblock %}

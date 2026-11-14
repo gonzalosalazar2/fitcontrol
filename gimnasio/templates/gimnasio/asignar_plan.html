@@ -1,0 +1,74 @@
+{% extends "gimnasio/base.html" %}
+{% block contenido %}
+  <h1>Asignar plan y registrar pago</h1>
+
+  <div style="background:#f2f2f2; border:1px solid #222; padding:12px;">
+    <div>Nombre: {{ socio.nombre }}</div>
+    <div>RUT: {{ socio.rut }}</div>
+    <span class="ayuda">Solo lectura</span>
+  </div>
+
+  {% if planes %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <label for="id_plan">Plan</label>
+    <select name="plan" id="id_plan" style="width:100%; padding:8px;">
+      <option value="">---------</option>
+      {% for p in planes %}
+        <option value="{{ p.id }}" data-precio="{{ p.precio }}" data-dias="{{ p.duracion_dias }}"
+          {% if form.plan.value|stringformat:"s" == p.id|stringformat:"s" %}selected{% endif %}>{{ p.nombre }}</option>
+      {% endfor %}
+    </select>
+    {% for error in form.plan.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <label for="precio_vista">Precio</label>
+    <input type="text" id="precio_vista" readonly style="background:#eee;">
+    <span class="ayuda">Se completa según el plan seleccionado</span>
+
+    <label for="id_fecha_inicio">Fecha de inicio</label>
+    {{ form.fecha_inicio }}
+    {% for error in form.fecha_inicio.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <label for="vencimiento_vista">Fecha de vencimiento</label>
+    <input type="text" id="vencimiento_vista" readonly style="background:#eee;">
+    <span class="ayuda">Se calcula automáticamente</span>
+
+    <label for="id_monto">Monto pagado</label>
+    {{ form.monto }}
+    {% for error in form.monto.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <label for="id_fecha_pago">Fecha de pago</label>
+    {{ form.fecha_pago }}
+    {% for error in form.fecha_pago.errors %}<p class="error">{{ error }}</p>{% endfor %}
+
+    <div class="botones">
+      <button type="submit">Registrar pago</button>
+      <a href="{% url 'lista_socios' %}">Cancelar</a>
+    </div>
+  </form>
+
+  <script>
+    // Solo muestra el precio y el vencimiento; el servidor los vuelve a calcular y valida.
+    const plan = document.getElementById('id_plan');
+    const inicio = document.getElementById('id_fecha_inicio');
+    const precio = document.getElementById('precio_vista');
+    const vence = document.getElementById('vencimiento_vista');
+    function actualizar() {
+      const op = plan.options[plan.selectedIndex];
+      if (!op || !op.dataset.precio) { precio.value = ''; vence.value = ''; return; }
+      precio.value = '$' + Number(op.dataset.precio).toLocaleString('es-CL');
+      if (inicio.value) {
+        const f = new Date(inicio.value + 'T00:00:00');
+        f.setDate(f.getDate() + Number(op.dataset.dias));
+        vence.value = f.toLocaleDateString('es-CL');
+      } else { vence.value = ''; }
+    }
+    plan.addEventListener('change', actualizar);
+    inicio.addEventListener('input', actualizar);
+    actualizar();
+  </script>
+  {% else %}
+    <p class="error">No hay planes cargados. Ejecute: python manage.py cargar_planes</p>
+  {% endif %}
+{% endblock %}

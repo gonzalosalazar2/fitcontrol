@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>FitControl</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; color: #222; }
+    header { display: flex; justify-content: space-between; padding: 16px 40px; border-bottom: 2px solid #222; }
+    header a { color: #222; }
+    main { max-width: 560px; margin: 24px auto; padding: 0 16px; }
+    label { display: block; margin-top: 16px; font-weight: bold; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; }
+    .ayuda { font-size: 12px; color: #666; }
+    .error { color: #a00; font-size: 14px; margin: 4px 0 0; }
+    .exito { background: #e8f5e9; border: 1px solid #2e7d32; padding: 10px; margin-bottom: 12px; }
+    .botones { margin-top: 24px; }
+    .botones button, .botones a { padding: 8px 20px; margin-right: 8px; }
+    nav a { display: block; margin: 12px 0; padding: 14px; border: 1px solid #222; text-align: center; color: #222; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>FitControl</strong>
+    <a href="{% url 'inicio' %}">Volver al menú</a>
+  </header>
+  <main>
+    {% if messages %}
+      {% for mensaje in messages %}
+        <div class="exito">{{ mensaje }}</div>
+      {% endfor %}
+    {% endif %}
+    {% block contenido %}{% endblock %}
+  </main>
+</body>
+</html>
